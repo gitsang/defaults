@@ -1,9 +1,9 @@
 # defaults
 
-[![CircleCI](https://circleci.com/gh/creasty/defaults/tree/master.svg?style=svg)](https://circleci.com/gh/creasty/defaults/tree/master)
-[![codecov](https://codecov.io/gh/creasty/defaults/branch/master/graph/badge.svg)](https://codecov.io/gh/creasty/defaults)
-[![GitHub release](https://img.shields.io/github/release/creasty/defaults.svg)](https://github.com/creasty/defaults/releases)
-[![License](https://img.shields.io/github/license/creasty/defaults.svg)](./LICENSE)
+[![CircleCI](https://circleci.com/gh/gitsang/defaults/tree/master.svg?style=svg)](https://circleci.com/gh/gitsang/defaults/tree/master)
+[![codecov](https://codecov.io/gh/gitsang/defaults/branch/master/graph/badge.svg)](https://codecov.io/gh/gitsang/defaults)
+[![GitHub release](https://img.shields.io/github/release/gitsang/defaults.svg)](https://github.com/gitsang/defaults/releases)
+[![License](https://img.shields.io/github/license/gitsang/defaults.svg)](./LICENSE)
 
 Initialize structs with default values
 
@@ -35,7 +35,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/creasty/defaults"
+	"github.com/gitsang/defaults"
 )
 
 type Gender string

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/creasty/defaults"
+	"github.com/gitsang/defaults"
 )
 
 type Gender string
