@@ -184,7 +184,6 @@ func (j *JSONOnlyType) UnmarshalJSON(b []byte) error {
 }
 
 func TestMustSet(t *testing.T) {
-
 	t.Run("right way", func(t *testing.T) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -226,7 +225,6 @@ func TestMustSet(t *testing.T) {
 		}
 		MustSet(sample)
 	})
-
 }
 
 func TestInit(t *testing.T) {
@@ -767,5 +765,26 @@ func TestDefaultsSetter(t *testing.T) {
 	}
 	if main.MainInt != 1 {
 		t.Errorf("expected 1 for MainInt, got %d", main.MainInt)
+	}
+}
+
+type ParentWithMapOfSliceOfChild struct {
+	Children map[string][]Child
+}
+
+func TestMapOfSliceOfStruct(t *testing.T) {
+	p := &ParentWithMapOfSliceOfChild{
+		Children: map[string][]Child{
+			"group1": {
+				{Name: "Jim"},
+			},
+		},
+	}
+	Set(p)
+	if p.Children["group1"][0].Age != 20 {
+		t.Errorf("expected age to be 20, got %d", p.Children["group1"][0].Age)
+	}
+	if p.Children["group1"][0].Name != "Jim" {
+		t.Errorf("expected name to be Jim, got %s", p.Children["group1"][0].Name)
 	}
 }

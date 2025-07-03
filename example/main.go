@@ -26,6 +26,9 @@ type Sample struct {
 	MapOfPtrStruct     map[string]*OtherStruct `default:"{\"Key3\": {\"Foo\":123}}"`
 	MapOfStructWithTag map[string]OtherStruct  `default:"{\"Key4\": {\"Foo\":123}}"`
 
+	MapOfStructWithOutTag map[string]OtherStruct
+	MapOfSliceWithOutTag  map[string][]OtherStruct
+
 	Struct    OtherStruct  `default:"{\"Foo\": 123}"`
 	StructPtr *OtherStruct `default:"{\"Foo\": 123}"`
 
@@ -47,7 +50,16 @@ func (s *OtherStruct) SetDefaults() {
 }
 
 func main() {
-	obj := &Sample{}
+	obj := &Sample{
+		MapOfStructWithOutTag: map[string]OtherStruct{
+			"hello": {},
+		},
+		MapOfSliceWithOutTag: map[string][]OtherStruct{
+			"hello": {
+				{},
+			},
+		},
+	}
 	if err := defaults.Set(obj); err != nil {
 		panic(err)
 	}
@@ -57,71 +69,4 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(string(out))
-
-	// Output:
-	// {
-	// 	"Name": "John Smith",
-	// 	"Age": 27,
-	// 	"Gender": "m",
-	// 	"Working": true,
-	// 	"SliceInt": [
-	// 		1,
-	// 		2,
-	// 		3
-	// 	],
-	// 	"SlicePtr": [
-	// 		1,
-	// 		2,
-	// 		3
-	// 	],
-	// 	"SliceString": [
-	// 		"a",
-	// 		"b"
-	// 	],
-	// 	"MapNull": {},
-	// 	"Map": {
-	// 		"key1": 123
-	// 	},
-	// 	"MapOfStruct": {
-	// 		"Key2": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 5577006791947779410
-	// 		}
-	// 	},
-	// 	"MapOfPtrStruct": {
-	// 		"Key3": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 8674665223082153551
-	// 		}
-	// 	},
-	// 	"MapOfStructWithTag": {
-	// 		"Key4": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 6129484611666145821
-	// 		}
-	// 	},
-	// 	"Struct": {
-	// 		"Hello": "world",
-	// 		"Foo": 123,
-	// 		"Random": 4037200794235010051
-	// 	},
-	// 	"StructPtr": {
-	// 		"Hello": "world",
-	// 		"Foo": 123,
-	// 		"Random": 3916589616287113937
-	// 	},
-	// 	"NoTag": {
-	// 		"Hello": "world",
-	// 		"Foo": 0,
-	// 		"Random": 6334824724549167320
-	// 	},
-	// 	"NoOption": {
-	// 		"Hello": "",
-	// 		"Foo": 0,
-	// 		"Random": 0
-	// 	}
-	// }
 }

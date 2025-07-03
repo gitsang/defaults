@@ -1,5 +1,4 @@
-defaults
-========
+# defaults
 
 [![CircleCI](https://circleci.com/gh/creasty/defaults/tree/master.svg?style=svg)](https://circleci.com/gh/creasty/defaults/tree/master)
 [![codecov](https://codecov.io/gh/creasty/defaults/branch/master/graph/badge.svg)](https://codecov.io/gh/creasty/defaults)
@@ -24,10 +23,9 @@ Initialize structs with default values
 - Recursively initializes fields in a struct
 - Dynamically sets default values by [`defaults.Setter`](./setter.go) interface
 - Preserves non-initial values from being reset with a default value
+- Set default values for all addressable structs
 
-
-Usage
------
+## 1. Usage
 
 ```go
 package main
@@ -58,6 +56,9 @@ type Sample struct {
 	MapOfPtrStruct     map[string]*OtherStruct `default:"{\"Key3\": {\"Foo\":123}}"`
 	MapOfStructWithTag map[string]OtherStruct  `default:"{\"Key4\": {\"Foo\":123}}"`
 
+	MapOfStructWithOutTag map[string]OtherStruct
+	MapOfSliceWithOutTag  map[string][]OtherStruct
+
 	Struct    OtherStruct  `default:"{\"Foo\": 123}"`
 	StructPtr *OtherStruct `default:"{\"Foo\": 123}"`
 
@@ -79,7 +80,16 @@ func (s *OtherStruct) SetDefaults() {
 }
 
 func main() {
-	obj := &Sample{}
+	obj := &Sample{
+		MapOfStructWithOutTag: map[string]OtherStruct{
+			"hello": {},
+		},
+		MapOfSliceWithOutTag: map[string][]OtherStruct{
+			"hello": {
+				{},
+			},
+		},
+	}
 	if err := defaults.Set(obj); err != nil {
 		panic(err)
 	}
@@ -89,72 +99,79 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(string(out))
+```
 
-	// Output:
-	// {
-	// 	"Name": "John Smith",
-	// 	"Age": 27,
-	// 	"Gender": "m",
-	// 	"Working": true,
-	// 	"SliceInt": [
-	// 		1,
-	// 		2,
-	// 		3
-	// 	],
-	// 	"SlicePtr": [
-	// 		1,
-	// 		2,
-	// 		3
-	// 	],
-	// 	"SliceString": [
-	// 		"a",
-	// 		"b"
-	// 	],
-	// 	"MapNull": {},
-	// 	"Map": {
-	// 		"key1": 123
-	// 	},
-	// 	"MapOfStruct": {
-	// 		"Key2": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 5577006791947779410
-	// 		}
-	// 	},
-	// 	"MapOfPtrStruct": {
-	// 		"Key3": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 8674665223082153551
-	// 		}
-	// 	},
-	// 	"MapOfStructWithTag": {
-	// 		"Key4": {
-	// 			"Hello": "world",
-	// 			"Foo": 123,
-	// 			"Random": 6129484611666145821
-	// 		}
-	// 	},
-	// 	"Struct": {
-	// 		"Hello": "world",
-	// 		"Foo": 123,
-	// 		"Random": 4037200794235010051
-	// 	},
-	// 	"StructPtr": {
-	// 		"Hello": "world",
-	// 		"Foo": 123,
-	// 		"Random": 3916589616287113937
-	// 	},
-	// 	"NoTag": {
-	// 		"Hello": "world",
-	// 		"Foo": 0,
-	// 		"Random": 6334824724549167320
-	// 	},
-	// 	"NoOption": {
-	// 		"Hello": "",
-	// 		"Foo": 0,
-	// 		"Random": 0
-	// 	}
-	// }
+output
+
+```json
+{
+  "Name": "John Smith",
+  "Age": 27,
+  "Gender": "m",
+  "Working": true,
+  "SliceInt": [1, 2, 3],
+  "SlicePtr": [1, 2, 3],
+  "SliceString": ["a", "b"],
+  "MapNull": {},
+  "Map": {
+    "key1": 123
+  },
+  "MapOfStruct": {
+    "Key2": {
+      "Hello": "world",
+      "Foo": 123,
+      "Random": 6012378114984103869
+    }
+  },
+  "MapOfPtrStruct": {
+    "Key3": {
+      "Hello": "world",
+      "Foo": 123,
+      "Random": 2848306665585403127
+    }
+  },
+  "MapOfStructWithTag": {
+    "Key4": {
+      "Hello": "world",
+      "Foo": 123,
+      "Random": 7421038243474730390
+    }
+  },
+  "MapOfStructWithOutTag": {
+    "hello": {
+      "Hello": "world",
+      "Foo": 0,
+      "Random": 6214942057906930174
+    }
+  },
+  "MapOfSliceWithOutTag": {
+    "hello": [
+      {
+        "Hello": "world",
+        "Foo": 0,
+        "Random": 5317591004601161060
+      }
+    ]
+  },
+  "Struct": {
+    "Hello": "world",
+    "Foo": 123,
+    "Random": 3365636741323893358
+  },
+  "StructPtr": {
+    "Hello": "world",
+    "Foo": 123,
+    "Random": 4271644362335896782
+  },
+  "NoTag": {
+    "Hello": "world",
+    "Foo": 0,
+    "Random": 8353712922077708401
+  },
+  "NoOption": {
+    "Hello": "",
+    "Foo": 0,
+    "Random": 0
+  }
 }
 ```
